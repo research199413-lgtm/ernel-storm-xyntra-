@@ -34,8 +34,8 @@ HEADERS = {
 today = datetime.now(TIMEZONE)
 
 OUTPUT_DIR = (
-    Path("INDEX")
-    / "data"
+    Path("data")
+    / "INDEX"
     / str(today.year)
     / f"{today.month:02d}"
 )
