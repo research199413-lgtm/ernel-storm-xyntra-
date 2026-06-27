@@ -11,8 +11,8 @@ import requests
 # SETTINGS
 # =====================================================
 
-LOOP_DURATION = 10      # Seconds between runs
-INTERVAL = 5            # Number of runs
+LOOP_DURATION = 1      # Seconds between runs
+INTERVAL = 1            # Number of runs
 
 TIMEZONE = ZoneInfo("Asia/Karachi")
 
