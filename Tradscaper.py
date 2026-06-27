@@ -23,14 +23,13 @@ TIMEZONE = ZoneInfo("Asia/Karachi")
 today = datetime.now(TIMEZONE)
 
 OUTPUT_DIR = (
-    Path("Trading")
-    / "data"
+    Path("data")
+    / "Trading"
     / str(today.year)
     / f"{today.month:02d}"
 )
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
 OUTPUT_FILE = OUTPUT_DIR / f"{today:%Y-%m-%d}.xlsx"
 
 # =====================================================
