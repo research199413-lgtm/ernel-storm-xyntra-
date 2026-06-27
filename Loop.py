@@ -5,8 +5,8 @@ from datetime import datetime
 from pathlib import Path
 
 # Configuration
-num_loops = 60
-interval = 300  # seconds
+num_loops = 3
+interval = 20  # seconds
 
 # Scripts to run
 SCRIPTS = [
