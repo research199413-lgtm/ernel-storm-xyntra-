@@ -1,11 +1,4 @@
-- name: Debug PAT
-  run: |
-    if [ -z "${{ secrets.PAT_TOKEN }}" ]; then
-      echo "PAT_TOKEN is EMPTY!"
-      exit 1
-    else
-      echo "PAT_TOKEN exists."
-      echo "Length: ${#PAT}"
-    fi
-  env:
-    PAT: ${{ secrets.PAT_TOKEN }}
+curl \
+  -H "Authorization: Bearer YOUR_PAT" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/user
