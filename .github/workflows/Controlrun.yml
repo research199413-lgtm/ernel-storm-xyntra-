@@ -1,115 +1,46 @@
-name: Auto Loop
+name: Control Runner
 
 on:
   workflow_dispatch:
+
   schedule:
-    - cron: '0 0 * * 1-5'      # 5:00 AM PKT
-    - cron: '0 3 * * 1-5'      # 8:00 AM PKT
-    - cron: '30 7 * * 1-5'     # 12:30 PM PKT
-    - cron: '0 10 * * 1-5'     # 3:00 PM PKT
+    # Every 5 minutes
+    - cron: "*/5 * * * *"
 
 jobs:
-  run:
+  trigger-repositories:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Install Dependencies
+      - name: Trigger Aetherlyn-Nyxara-12
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            https://api.github.com/repos/YOUR_USERNAME/Aetherlyn-Nyxara-12/actions/workflows/scheduler.yml/dispatches \
+            -d '{"ref":"main"}'
 
-      - name: Configure Git
+      - name: Wait 5 seconds
+        run: sleep 5
+
+      - name: Trigger varelix-kyrion
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            https://api.github.com/repos/YOUR_USERNAME/varelix-kyrion/actions/workflows/indscrape.yml/dispatches \
+            -d '{"ref":"main"}'
 
-      - name: Show Repository Before Run
+      - name: Wait 5 seconds
+        run: sleep 5
+
+      - name: Trigger Thalorae-BackLioraen
         run: |
-          echo "Current Directory:"
-          pwd
-          echo ""
-          echo "Repository Files:"
-          ls -R
-
-      - name: Run Loop
-        run: python Loop.py
-
-      - name: Show Repository After Run
-        run: |
-          echo "=============================="
-          echo "Current Directory"
-          pwd
-
-          echo ""
-          echo "Folders Created"
-          find . -type d
-
-          echo ""
-          echo "Excel Files"
-          find . -name "*.xlsx"
-
-          echo ""
-          echo "Git Status"
-          git status
-
-      - name: Check for Changes
-        id: changes
-        run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit Changes
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          git add .
-          git commit -m "Auto Update $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || exit 0
-          git push
-
-      - name: Upload Trading Folder
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Trading
-          path: Trading
-          if-no-files-found: ignore
-
-      - name: Upload INDEX Folder
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: INDEX
-          path: INDEX
-          if-no-files-found: ignore
-
-      - name: Upload INTRA Folder
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: INTRA
-          path: INTRA
-          if-no-files-found: ignore
-
-      - name: Upload Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Logs
-          path: logs
-          if-no-files-found: ignore
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            https://api.github.com/repos/YOUR_USERNAME/Thalorae-BackLioraen/actions/workflows/SolvynRun.yml/dispatches \
+            -d '{"ref":"main"}'
