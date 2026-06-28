@@ -1,79 +1,11 @@
-name: Control Runner
-
-on:
-  workflow_dispatch:
-
-  schedule:
-    # Every 5 minutes
-    - cron: "*/5 * * * *"
-
-jobs:
-  trigger-repositories:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Trigger Aetherlyn-Nyxara-12
-        run: |
-          echo "Triggering Aetherlyn-Nyxara-12..."
-
-          STATUS=$(curl -s -o response.txt -w "%{http_code}" \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-            https://api.github.com/repos/research199413-lgtm/Aetherlyn-Nyxara-12/actions/workflows/scheduler.yml/dispatches \
-            -d '{"ref":"main"}')
-
-          echo "HTTP Status: $STATUS"
-          cat response.txt
-
-          if [ "$STATUS" != "204" ]; then
-            echo "Failed to trigger Aetherlyn-Nyxara-12"
-            exit 1
-          fi
-
-      - name: Wait 5 seconds
-        run: sleep 5
-
-      - name: Trigger varelix-kyrion
-        run: |
-          echo "Triggering varelix-kyrion..."
-
-          STATUS=$(curl -s -o response.txt -w "%{http_code}" \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-            https://api.github.com/repos/research199413-lgtm/varelix-kyrion/actions/workflows/indscrape.yml/dispatches \
-            -d '{"ref":"main"}')
-
-          echo "HTTP Status: $STATUS"
-          cat response.txt
-
-          if [ "$STATUS" != "204" ]; then
-            echo "Failed to trigger varelix-kyrion"
-            exit 1
-          fi
-
-      - name: Wait 5 seconds
-        run: sleep 5
-
-      - name: Trigger Thalorae-BackLioraen
-        run: |
-          echo "Triggering Thalorae-BackLioraen..."
-
-          STATUS=$(curl -s -o response.txt -w "%{http_code}" \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-            https://api.github.com/repos/research199413-lgtm/Thalorae-BackLioraen/actions/workflows/SolvynRun.yml/dispatches \
-            -d '{"ref":"main"}')
-
-          echo "HTTP Status: $STATUS"
-          cat response.txt
-
-          if [ "$STATUS" != "204" ]; then
-            echo "Failed to trigger Thalorae-BackLioraen"
-            exit 1
-          fi
-
-      - name: Finished
-        run: echo "All repositories triggered successfully."
+- name: Debug PAT
+  run: |
+    if [ -z "${{ secrets.PAT_TOKEN }}" ]; then
+      echo "PAT_TOKEN is EMPTY!"
+      exit 1
+    else
+      echo "PAT_TOKEN exists."
+      echo "Length: ${#PAT}"
+    fi
+  env:
+    PAT: ${{ secrets.PAT_TOKEN }}
